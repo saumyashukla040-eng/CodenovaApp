@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeNova Full-Stack Suite | Notes & Expense Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body class="theme-dark">
+    <!-- App Container -->
+    <div class="app-container">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <div class="brand-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                            <polyline points="2 17 12 22 22 17"></polyline>
+                            <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                    </div>
+                    <div class="brand-text">
+                        <h2>CodeNova</h2>
+                        <span class="badge-tag">Batch 01 Intern</span>
+                    </div>
+                </div>
+                <button class="btn-icon mobile-close-btn" id="sidebarCloseBtn" aria-label="Close sidebar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-section-label">MAIN WORKSPACE</div>
+                <button class="nav-item active" data-view="overview">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="9"></rect>
+                        <rect x="14" y="3" width="7" height="5"></rect>
+                        <rect x="14" y="12" width="7" height="9"></rect>
+                        <rect x="3" y="16" width="7" height="5"></rect>
+                    </svg>
+                    <span>Dashboard Overview</span>
+                </button>
+                <button class="nav-item" data-view="notes">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    <span>Notes Application</span>
+                    <span class="nav-counter" id="notesNavCount">0</span>
+                </button>
+                <button class="nav-item" data-view="expenses">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                        <line x1="2" y1="10" x2="22" y2="10"></line>
+                        <circle cx="6" cy="15" r="1"></circle>
+                        <circle cx="10" cy="15" r="1"></circle>
+                    </svg>
+                    <span>Expense Tracker</span>
+                    <span class="nav-counter" id="expensesNavCount">0</span>
+                </button>
+
+                <div class="nav-section-label">DEVELOPER TOOLS</div>
+                <a href="/docs" target="_blank" rel="noopener noreferrer" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    <span>Swagger UI (/docs)</span>
+                    <span class="badge-external">↗</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="status-indicator">
+                    <span class="pulse-dot" id="serverPulse"></span>
+                    <div class="status-details">
+                        <span class="status-title">Backend API</span>
+                        <span class="status-subtitle" id="serverStatusText">Connecting...</span>
+                    </div>
+                </div>
+                <div class="user-profile">
+                    <div class="avatar">CN</div>
+                    <div class="user-info">
+                        <div class="user-name">Developer Workspace</div>
+                        <div class="user-role">Internship Batch 01</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Area -->
+        <main class="main-content">
+            
+            <!-- Top Navbar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button class="btn-icon mobile-menu-btn" id="mobileMenuBtn" aria-label="Open navigation">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </button>
+                    <div>
+                        <h1 class="page-title" id="pageTitle">Dashboard Overview</h1>
+                        <p class="page-subtitle" id="pageSubtitle">Comprehensive system overview and financial summary</p>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="current-time-badge" id="liveTimeBadge">--:--:--</div>
+                    <button class="btn btn-primary" id="topbarActionBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        <span id="topbarActionText">Create Note</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Scrollable Content Canvas -->
+            <div class="content-body">
+
+                <!-- ============================================================== -->
+                <!-- VIEW 1: DASHBOARD OVERVIEW                                      -->
+                <!-- ============================================================== -->
+                <section class="view-panel active" id="view-overview">
+                    
+                    <!-- KPI Metric Cards -->
+                    <div class="kpi-grid">
+                        <div class="kpi-card card-gradient-purple">
+                            <div class="kpi-icon">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                            </div>
+                            <div class="kpi-info">
+                                <span class="kpi-label">Total Notes</span>
+                                <h3 class="kpi-value" id="kpiTotalNotes">0</h3>
+                                <span class="kpi-subtext" id="kpiPinnedNotes">0 pinned to top</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card card-gradient-green">
+                            <div class="kpi-icon">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                            </div>
+                            <div class="kpi-info">
+                                <span class="kpi-label">Total Income</span>
+                                <h3 class="kpi-value text-green" id="kpiTotalIncome">$0.00</h3>
+                                <span class="kpi-subtext" id="kpiIncomeCount">0 recorded credits</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card card-gradient-rose">
+                            <div class="kpi-icon">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
+                            </div>
+                            <div class="kpi-info">
+                                <span class="kpi-label">Total Expenses</span>
+                                <h3 class="kpi-value text-rose" id="kpiTotalExpense">$0.00</h3>
+                                <span class="kpi-subtext" id="kpiExpenseCount">0 recorded debits</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card card-gradient-blue">
+                            <div class="kpi-icon">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                            </div>
+                            <div class="kpi-info">
+                                <span class="kpi-label">Net Savings</span>
+                                <h3 class="kpi-value" id="kpiNetSavings">$0.00</h3>
+                                <span class="kpi-subtext" id="kpiSavingsRatio">Real-time DB balance</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Split Overview Showcase -->
+                    <div class="dashboard-split-grid">
+                        
+                        <!-- Recent Notes Widget -->
+                        <div class="card panel-card">
+                            <div class="card-header">
+                                <div>
+                                    <h3 class="card-title">Recent Notes</h3>
+                                    <p class="card-subtitle">Quick view of your most recently updated notes</p>
+                                </div>
+                                <button class="btn btn-secondary btn-sm" onclick="app.switchView('notes')">View All</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="recent-notes-list" id="overviewRecentNotes">
+                                    <!-- Rendered dynamically -->
+                                    <div class="empty-state-mini">
+                                        <p>No notes found. Create your first note!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Transactions Widget -->
+                        <div class="card panel-card">
+                            <div class="card-header">
+                                <div>
+                                    <h3 class="card-title">Recent Transactions</h3>
+                                    <p class="card-subtitle">Latest entries recorded in your persistent database</p>
+                                </div>
+                                <button class="btn btn-secondary btn-sm" onclick="app.switchView('expenses')">View All</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="recent-txns-list" id="overviewRecentTxns">
+                                    <!-- Rendered dynamically -->
+                                    <div class="empty-state-mini">
+                                        <p>No transactions yet. Add income or expenses!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- ============================================================== -->
+                <!-- VIEW 2: TASK 1 - NOTES APPLICATION                             -->
+                <!-- ============================================================== -->
+                <section class="view-panel" id="view-notes">
+                    
+                    <!-- Notes Toolbar -->
+                    <div class="toolbar-card">
+                        <div class="search-box">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            <input type="text" id="notesSearchInput" placeholder="Search notes by title or content...">
+                            <button class="clear-search-btn" id="notesClearSearch" style="display:none;" title="Clear Search">✕</button>
+                        </div>
+                        <div class="toolbar-actions">
+                            <select id="notesCategoryFilter" class="form-select filter-select">
+                                <option value="all">All Categories</option>
+                                <option value="General">General</option>
+                                <option value="Work">Work</option>
+                                <option value="Personal">Personal</option>
+                                <option value="Study">Study</option>
+                                <option value="Ideas">Ideas</option>
+                            </select>
+                            <button class="btn btn-secondary btn-icon-only" id="notesViewToggle" title="Toggle Grid / List View">
+                                <svg id="notesViewIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                            </button>
+                            <button class="btn btn-primary" id="openAddNoteModalBtn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                <span>New Note</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Notes Container -->
+                    <div class="notes-grid" id="notesContainer">
+                        <!-- Loaded via JS -->
+                    </div>
+
+                    <!-- Empty State for Notes -->
+                    <div class="empty-state" id="notesEmptyState" style="display: none;">
+                        <div class="empty-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+                        </div>
+                        <h3>No Notes Found</h3>
+                        <p id="notesEmptyMessage">Create your first note or adjust your search filter.</p>
+                        <button class="btn btn-primary" onclick="app.openNoteModal()">Create First Note</button>
+                    </div>
+
+                </section>
+
+                <!-- ============================================================== -->
+                <!-- VIEW 3: TASK 2 - EXPENSE TRACKER                               -->
+                <!-- ============================================================== -->
+                <section class="view-panel" id="view-expenses">
+                    
+                    <!-- Expense Metric Banner -->
+                    <div class="kpi-grid mb-6">
+                        <div class="kpi-card card-gradient-green">
+                            <div class="kpi-icon">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                            </div>
+                            <div class="kpi-info">
+                                <span class="kpi-label">Total Income</span>
+                                <h3 class="kpi-value text-green" id="expenseTotalIncome">$0.00</h3>
+                                <span class="kpi-subtext" id="expenseIncomeSubtext">0 income transactions</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card card-gradient-rose">
+                            <div class="kpi-icon">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
+                            </div>
+                            <div class="kpi-info">
+                                <span class="kpi-label">Total Expenses</span>
+                                <h3 class="kpi-value text-rose" id="expenseTotalExpenses">$0.00</h3>
+                                <span class="kpi-subtext" id="expenseExpensesSubtext">0 expense transactions</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card card-gradient-blue">
+                            <div class="kpi-icon">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                            </div>
+                            <div class="kpi-info">
+                                <span class="kpi-label">Net Savings</span>
+                                <h3 class="kpi-value" id="expenseNetSavings">$0.00</h3>
+                                <span class="kpi-subtext" id="expenseNetStatus">Clean balance calculated</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Expense Filtering Toolbar -->
+                    <div class="toolbar-card">
+                        <div class="search-box">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            <input type="text" id="txnsSearchInput" placeholder="Search by description, category, or notes...">
+                            <button class="clear-search-btn" id="txnsClearSearch" style="display:none;" title="Clear Search">✕</button>
+                        </div>
+                        <div class="toolbar-actions">
+                            <select id="txnsTypeFilter" class="form-select filter-select">
+                                <option value="all">All Types</option>
+                                <option value="income">Income Only (+)</option>
+                                <option value="expense">Expense Only (-)</option>
+                            </select>
+                            <select id="txnsCategoryFilter" class="form-select filter-select">
+                                <option value="all">All Categories</option>
+                                <option value="Salary">Salary</option>
+                                <option value="Freelance">Freelance</option>
+                                <option value="Investment">Investment</option>
+                                <option value="Food & Dining">Food & Dining</option>
+                                <option value="Housing & Rent">Housing & Rent</option>
+                                <option value="Utilities">Utilities</option>
+                                <option value="Transportation">Transportation</option>
+                                <option value="Entertainment">Entertainment</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Healthcare">Healthcare</option>
+                                <option value="Education">Education</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <button class="btn btn-primary" id="openAddTxnModalBtn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                <span>Add Transaction</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Transactions Table Card -->
+                    <div class="card table-card">
+                        <div class="table-responsive">
+                            <table class="data-table" id="txnsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Description</th>
+                                        <th>Category</th>
+                                        <th>Type</th>
+                                        <th class="text-right">Amount</th>
+                                        <th class="text-center">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="txnsTableBody">
+                                    <!-- Rendered dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Empty State for Transactions -->
+                        <div class="empty-state" id="txnsEmptyState" style="display: none;">
+                            <div class="empty-icon">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+                            </div>
+                            <h3>No Transactions Recorded</h3>
+                            <p id="txnsEmptyMessage">Record your income or expenses to track your financial health.</p>
+                            <button class="btn btn-primary" onclick="app.openTransactionModal()">Add First Transaction</button>
+                        </div>
+                    </div>
+
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 1: ADD / EDIT NOTE                                       -->
+    <!-- ============================================================== -->
+    <div class="modal-overlay" id="noteModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title" id="noteModalTitle">Create New Note</h3>
+                <button class="btn-icon modal-close-btn" onclick="app.closeNoteModal()" aria-label="Close modal">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <form id="noteForm">
+                <input type="hidden" id="noteId">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="noteTitle" class="form-label">Note Title <span class="required">*</span></label>
+                        <input type="text" id="noteTitle" class="form-control" placeholder="e.g. Project Architecture Plan" required maxlength="200">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label for="noteCategory" class="form-label">Category</label>
+                            <select id="noteCategory" class="form-control form-select">
+                                <option value="General">General</option>
+                                <option value="Work">Work</option>
+                                <option value="Personal">Personal</option>
+                                <option value="Study">Study</option>
+                                <option value="Ideas">Ideas</option>
+                            </select>
+                        </div>
+                        <div class="form-group flex-1">
+                            <label class="form-label">Accent Color</label>
+                            <div class="color-picker-group">
+                                <label class="color-option">
+                                    <input type="radio" name="noteColor" value="purple" checked>
+                                    <span class="color-swatch color-purple"></span>
+                                </label>
+                                <label class="color-option">
+                                    <input type="radio" name="noteColor" value="blue">
+                                    <span class="color-swatch color-blue"></span>
+                                </label>
+                                <label class="color-option">
+                                    <input type="radio" name="noteColor" value="emerald">
+                                    <span class="color-swatch color-emerald"></span>
+                                </label>
+                                <label class="color-option">
+                                    <input type="radio" name="noteColor" value="amber">
+                                    <span class="color-swatch color-amber"></span>
+                                </label>
+                                <label class="color-option">
+                                    <input type="radio" name="noteColor" value="rose">
+                                    <span class="color-swatch color-rose"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="noteContent" class="form-label">Content / Markdown Text <span class="required">*</span></label>
+                        <textarea id="noteContent" class="form-control" rows="6" placeholder="Type your note content here..." required></textarea>
+                    </div>
+
+                    <div class="form-checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="noteIsPinned">
+                            <span class="checkbox-custom"></span>
+                            <span>Pin this note to the top</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="app.closeNoteModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveNoteBtn">Save Note</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 2: ADD / EDIT TRANSACTION                                -->
+    <!-- ============================================================== -->
+    <div class="modal-overlay" id="txnModal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title" id="txnModalTitle">Add Transaction</h3>
+                <button class="btn-icon modal-close-btn" onclick="app.closeTransactionModal()" aria-label="Close modal">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <form id="txnForm">
+                <input type="hidden" id="txnId">
+                <div class="modal-body">
+                    
+                    <!-- Type Selector Pill -->
+                    <div class="form-group">
+                        <label class="form-label">Transaction Type <span class="required">*</span></label>
+                        <div class="type-selector">
+                            <button type="button" class="type-btn active type-expense" data-type="expense" id="typeExpenseBtn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
+                                <span>Expense (-)</span>
+                            </button>
+                            <button type="button" class="type-btn type-income" data-type="income" id="typeIncomeBtn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                                <span>Income (+)</span>
+                            </button>
+                        </div>
+                        <input type="hidden" id="txnType" value="expense">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group flex-1">
+                            <label for="txnAmount" class="form-label">Amount ($) <span class="required">*</span></label>
+                            <input type="number" step="0.01" min="0.01" id="txnAmount" class="form-control" placeholder="0.00" required>
+                        </div>
+                        <div class="form-group flex-1">
+                            <label for="txnDate" class="form-label">Date <span class="required">*</span></label>
+                            <input type="date" id="txnDate" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txnTitle" class="form-label">Description / Title <span class="required">*</span></label>
+                        <input type="text" id="txnTitle" class="form-control" placeholder="e.g. AWS Cloud Hosting, Client Retainer" required maxlength="200">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txnCategory" class="form-label">Category <span class="required">*</span></label>
+                        <select id="txnCategory" class="form-control form-select" required>
+                            <!-- Updated dynamically based on income or expense -->
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="txnNotes" class="form-label">Notes (Optional)</label>
+                        <textarea id="txnNotes" class="form-control" rows="2" placeholder="Additional details or invoice reference..."></textarea>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="app.closeTransactionModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveTxnBtn">Save Transaction</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- MODAL 3: DELETE CONFIRMATION DIALOG                            -->
+    <!-- ============================================================== -->
+    <div class="modal-overlay" id="deleteModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-sm">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirm Deletion</h3>
+                <button class="btn-icon modal-close-btn" onclick="app.closeDeleteModal()" aria-label="Close modal">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="delete-warning-box">
+                    <div class="warning-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    </div>
+                    <p id="deleteModalMessage">Are you sure you want to permanently delete this item? This action cannot be undone.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="app.closeDeleteModal()">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete Permanently</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Hub -->
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+    <!-- App JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
